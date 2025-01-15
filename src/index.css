@@ -1,0 +1,27 @@
+.auto-width-input-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .auto-width-input-container .measure-element {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    overflow: scroll;
+    white-space: pre;
+    visibility: hidden;
+  }
+  
+  .auto-width-input-container .auto-width-input {
+    box-sizing: border-box;
+    padding: 4px;
+    border: 0px;
+    transition: all 0.3s;
+  }
+  
+  .auto-width-input-container .auto-width-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
