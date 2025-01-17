@@ -31,6 +31,18 @@ const ReactAutoSizeInput: React.FC<ReactAutoSizeInputProps> = memo(
     const measureRef = useRef<HTMLDivElement>(null);
     const editableRef = useRef<HTMLDivElement>(null);
 
+    const isFirstRender = useRef(true);
+
+    // 处理 defaultValue 的初始化
+    useEffect(() => {
+      if (isFirstRender.current && editableRef.current) {
+        if (defaultValue !== undefined) {
+          editableRef.current.textContent = defaultValue;
+        }
+        isFirstRender.current = false;
+      }
+    }, [defaultValue]);
+
     const handleInput = useCallback(
       (e: React.FormEvent<HTMLDivElement>) => {
         const newValue = e.currentTarget.textContent || "";
@@ -61,11 +73,12 @@ const ReactAutoSizeInput: React.FC<ReactAutoSizeInputProps> = memo(
     const computedStyle = useMemo(
       () => ({
         ...inputStyle,
-        display: "inline",
+        display: "inline-block",
         cursor: !disabled ? "text" : "not-allowed",
+        minWidth: minWidth ?? "10px",
         paddingRight: "2px",
       }),
-      [inputStyle, disabled]
+      [inputStyle, disabled, minWidth]
     );
 
     const editableRefCallback = (el: HTMLDivElement) => {
@@ -75,6 +88,16 @@ const ReactAutoSizeInput: React.FC<ReactAutoSizeInputProps> = memo(
       }
     };
 
+    // 添加处理回车键的函数
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+      },
+      []
+    );
+
     return (
       <div className={classNames("auto-width-input-container", inputClassName)}>
         <div ref={measureRef} className='measure-element' aria-hidden='true' />
@@ -83,6 +106,13 @@ const ReactAutoSizeInput: React.FC<ReactAutoSizeInputProps> = memo(
           contentEditable={!disabled}
           onInput={handleInput}
           onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          onPaste={(e) => {
+            e.preventDefault();
+            // 获取纯文本
+            const text = e.clipboardData.getData("text/plain");
+            editableRef.current.textContent = text;
+          }}
           className={classNames("auto-width-input", inputClassName)}
           style={computedStyle}
           data-placeholder={placeholder}
