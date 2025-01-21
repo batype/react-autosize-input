@@ -99,26 +99,33 @@ const ReactAutoSizeInput: React.FC<ReactAutoSizeInputProps> = memo(
     );
 
     return (
-      <div className={classNames("auto-width-input-container", inputClassName)}>
-        <div ref={measureRef} className='measure-element' aria-hidden='true' />
+      <>
         <div
-          ref={editableRefCallback}
-          contentEditable={!disabled}
-          onInput={handleInput}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          onPaste={(e) => {
-            e.preventDefault();
-            // 获取纯文本
-            const text = e.clipboardData.getData("text/plain");
-            editableRef.current.textContent = text;
-          }}
-          className={classNames("auto-width-input", inputClassName)}
-          style={computedStyle}
-          data-placeholder={placeholder}
-          suppressContentEditableWarning
+          ref={measureRef}
+          className='auto-width-input-measure-element'
+          aria-hidden='true'
         />
-      </div>
+        <div
+          className={classNames("auto-width-input-container", inputClassName)}>
+          <div
+            ref={editableRefCallback}
+            contentEditable={!disabled}
+            onInput={handleInput}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            onPaste={(e) => {
+              e.preventDefault();
+              // 获取纯文本
+              const text = e.clipboardData.getData("text/plain");
+              editableRef.current.textContent = text;
+            }}
+            className={classNames("auto-width-input", inputClassName)}
+            style={computedStyle}
+            data-placeholder={placeholder}
+            suppressContentEditableWarning
+          />
+        </div>
+      </>
     );
   }
 );

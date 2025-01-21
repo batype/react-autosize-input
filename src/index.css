@@ -2,7 +2,7 @@
   position: relative;
   display: inline-block;
 }
-.auto-width-input-container .measure-element {
+.auto-width-input-measure-element {
   position: absolute;
   top: 0;
   left: 0;
